@@ -49,7 +49,7 @@ class InvoiceFactoryException extends \Exception
      */
     public static function totalMustNotBeNegative(): InvoiceFactoryException
     {
-        return new self('Invoice total value must not be a negative number.');
+        return new self('Invoice total value must not be a negative number.', self::TOTAL_MUST_NOT_BE_NEGATIVE);
     }
 
     /**
@@ -57,6 +57,6 @@ class InvoiceFactoryException extends \Exception
      */
     public static function totalMustBeNumeric(): InvoiceFactoryException
     {
-        return new self('Invoice total value must be numeric.');
+        return new self('Invoice total value must be numeric.', self::TOTAL_MUST_BE_NUMERIC);
     }
 }
