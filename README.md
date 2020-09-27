@@ -36,9 +36,9 @@ Class usage:
 ```php
 $instance->setData($fileData);
 $instance->setCurrencies([
-    new Currency('EUR', 1),
-    new Currency('USD', 0.987),
-    new Currency('GBP', 0.878),
+    new Currency('EUR', new Decimal('1')),
+    new Currency('USD', new Decimal('0.987')),
+    new Currency('GBP', new Decimal('0.878')),
 ]);
 $instance->getTotals($vat = ''): array;
 ```
