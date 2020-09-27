@@ -79,11 +79,26 @@ class Calculator implements CalculatorInterface
     {
         foreach ($invoices as $invoice) {
             $parentId = $invoice->getParentId();
-            if ($parentId && !isset($invoices[$parentId])) {
+            if ($parentId && !$this->findInvoice($parentId)) {
                 throw CalculatorException::missingParentDocument($parentId);
             }
         }
 
         $this->invoices = $invoices;
+    }
+
+    /**
+     * @param string $id
+     * @return Invoice
+     */
+    private function findInvoice(string $id): ?Invoice
+    {
+        foreach ($this->invoices as $invoice) {
+            if ($invoice->getId() === $id) {
+                return $invoice;
+            }
+        }
+
+        return null;
     }
 }

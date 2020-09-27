@@ -39,7 +39,7 @@ class InvoiceFactory implements InvoiceFactoryInterface
         foreach ($dataGenerator as $data) {
             $invoice = $this->createFromCSVRow($data);
 
-            $invoices[$invoice->getId()] = $invoice;
+            $invoices[] = $invoice;
         }
 
         return $invoices;
