@@ -1,0 +1,19 @@
+{
+    "name": "clippings/invoices",
+    "description": "PHP console command tool, that lets you sum invoice documents in different currencies via a file.",
+    "authors": [
+        {
+            "name": "Dimitar Hadzhiev",
+            "email": "dhadzhiew@gmail.com"
+        }
+    ],
+    "require": {
+    },
+    "autoload": {
+        "psr-4": {
+            "Clippings\\": "./src"
+        }
+    },
+    "require-dev": {
+    }
+}

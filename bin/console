@@ -1,0 +1,27 @@
+#!/usr/bin/env php
+<?php
+
+use Clippings\Component\Calculator\Calculator;
+use Clippings\Component\Calculator\CurrencyConverter;
+use Clippings\Component\Calculator\Util\Command\CommandException;
+use Clippings\Component\Calculator\Util\Command\CommandRunner;
+use Clippings\Component\Calculator\Util\Parser\CSVFileParser;
+use Clippings\Component\Calculator\Util\Parser\FileDataSource;
+use Clippings\Component\Calculator\ImportInvoicesCommand;
+use Clippings\Component\Calculator\InvoiceFactory;
+
+require __DIR__ . '/../vendor/autoload.php';
+
+try {
+    $runner = new CommandRunner($_SERVER['argv']);
+    $currencyConverter = new CurrencyConverter(['GBP', 'EUR', 'USD']);
+    $calculator = new Calculator($currencyConverter);
+    $dataSource = new FileDataSource();
+    $parser = new CSVFileParser($dataSource, true);
+
+    $runner->addCommand('import', new ImportInvoicesCommand($calculator, $parser, new InvoiceFactory()));
+
+    $runner->run();
+} catch (CommandException $e) {
+    echo 'ERROR: ' . $e->getMessage();
+}
