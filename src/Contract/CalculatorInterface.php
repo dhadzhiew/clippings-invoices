@@ -2,7 +2,6 @@
 
 namespace Clippings\Component\Calculator\Contract;
 
-use Clippings\Component\Calculator\Currency;
 use Clippings\Component\Calculator\Total;
 
 interface CalculatorInterface
