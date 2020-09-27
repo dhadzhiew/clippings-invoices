@@ -39,7 +39,7 @@ class Calculator implements CalculatorInterface
 
             $customer = $invoice->getCustomer();
             if (!array_key_exists($customer, $sumsByCustomer)) {
-                $sumsByCustomer[$customer] = new Total($customer, new Decimal(0), $resultCurrencyCode);
+                $sumsByCustomer[$customer] = new Total($customer, new Decimal(0, CurrencyConverter::DECIMAL_SCALE), $resultCurrencyCode);
             }
 
             $totalInResultCurrency = $this->currencyConverter->convert(
@@ -79,7 +79,7 @@ class Calculator implements CalculatorInterface
     {
         foreach ($invoices as $invoice) {
             $parentId = $invoice->getParentId();
-            if ($parentId && !$this->findInvoice($parentId)) {
+            if ($parentId && !$this->findInvoice($invoices, $parentId)) {
                 throw CalculatorException::missingParentDocument($parentId);
             }
         }
@@ -88,12 +88,13 @@ class Calculator implements CalculatorInterface
     }
 
     /**
+     * @param Invoice[] $invoices
      * @param string $id
      * @return Invoice
      */
-    private function findInvoice(string $id): ?Invoice
+    private static function findInvoice(array $invoices, string $id): ?Invoice
     {
-        foreach ($this->invoices as $invoice) {
+        foreach ($invoices as $invoice) {
             if ($invoice->getId() === $id) {
                 return $invoice;
             }

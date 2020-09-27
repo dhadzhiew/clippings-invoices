@@ -9,7 +9,7 @@ use Clippings\Component\Calculator\Util\Type\Decimal;
 class CurrencyConverter implements CurrencyConverterInterface
 {
     /** @var int */
-    private const DECIMAL_SCALE = 14;
+    public const DECIMAL_SCALE = 14;
 
     /** @var string[] */
     private $allowedCurrencyCodes = [];
