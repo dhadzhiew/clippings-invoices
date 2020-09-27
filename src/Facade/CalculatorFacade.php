@@ -50,6 +50,6 @@ class CalculatorFacade
      */
     public function setCurrencies(array $currencies): void
     {
-        $this->calculator->setCurrencies($currencies);
+        $this->calculator->getCurrencyConverter()->setCurrencies($currencies);
     }
 }

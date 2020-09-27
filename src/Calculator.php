@@ -86,12 +86,4 @@ class Calculator implements CalculatorInterface
 
         $this->invoices = $invoices;
     }
-
-    /**
-     * @param array $currencies
-     */
-    public function setCurrencies(array $currencies): void
-    {
-        $this->currencyConverter->setCurrencies($currencies);
-    }
 }

@@ -13,11 +13,6 @@ interface CalculatorInterface
     public function setInvoices(array $data): void;
 
     /**
-     * @param Currency[] $currencies
-     */
-    public function setCurrencies(array $currencies): void;
-
-    /**
      * @param string $vat
      * @return Total[]
      */

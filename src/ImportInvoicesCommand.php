@@ -61,9 +61,9 @@ class ImportInvoicesCommand implements CommandInterface
     {
         $normalizedParams = self::normalizeParams($params);
 
-        $this->calculator->setCurrencies($normalizedParams[self::PARAM_EXCHANGE_RATES]);
-
         $currencyConverter = $this->calculator->getCurrencyConverter();
+        $currencyConverter->setCurrencies($normalizedParams[self::PARAM_EXCHANGE_RATES]);
+
         $outputCurrencyCode = $normalizedParams[self::PARAM_OUTPUT_CURRENCY];
         $currencyConverter->validateCurrencyCode($outputCurrencyCode);
 
