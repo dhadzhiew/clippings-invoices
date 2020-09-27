@@ -52,12 +52,4 @@ class CalculatorFacade
     {
         $this->calculator->setCurrencies($currencies);
     }
-
-    /**
-     * @param string $code
-     */
-    public function setOutputCurrencyCode(string $code): void
-    {
-        $this->calculator->setOutputCurrencyCode($code);
-    }
 }
