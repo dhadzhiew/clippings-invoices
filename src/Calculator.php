@@ -12,9 +12,6 @@ class Calculator implements CalculatorInterface
     /** @var Invoice[] */
     private $invoices = [];
 
-    /** @var string */
-    private $outputCurrencyCode;
-
     /** @var CurrencyConverterInterface */
     private $currencyConverter;
 
@@ -32,10 +29,7 @@ class Calculator implements CalculatorInterface
      */
     public function getTotals($vat = ''): array
     {
-        if (!$this->outputCurrencyCode) {
-            throw CalculatorException::outputCurrencyNotSet();
-        }
-
+        $resultCurrencyCode = $this->currencyConverter->getBaseCurrencyCode();
         /** @var Total[] $sumsByCustomer */
         $sumsByCustomer = [];
         foreach ($this->invoices as $invoice) {
@@ -45,22 +39,22 @@ class Calculator implements CalculatorInterface
 
             $customer = $invoice->getCustomer();
             if (!array_key_exists($customer, $sumsByCustomer)) {
-                $sumsByCustomer[$customer] = new Total($customer, new Decimal(0), $this->outputCurrencyCode);
+                $sumsByCustomer[$customer] = new Total($customer, new Decimal(0), $resultCurrencyCode);
             }
 
-            $totalInOutputCurrency = $this->currencyConverter->convert(
+            $totalInResultCurrency = $this->currencyConverter->convert(
                 new Decimal($invoice->getTotal()),
                 $invoice->getCurrencyCode(),
-                $this->outputCurrencyCode
+                $resultCurrencyCode
             );
 
             switch ($invoice->getType()) {
                 case InvoiceType::INVOICE:
                 case InvoiceType::DEBIT:
-                    $sumsByCustomer[$customer]->addToAmount($totalInOutputCurrency);
+                    $sumsByCustomer[$customer]->addToAmount($totalInResultCurrency);
                     break;
                 case InvoiceType::CREDIT:
-                    $sumsByCustomer[$customer]->subFromAmount($totalInOutputCurrency);
+                    $sumsByCustomer[$customer]->subFromAmount($totalInResultCurrency);
                     break;
                 default:
                     throw CalculatorException::notSupportedInvoiceType($invoice->getType());
@@ -68,6 +62,14 @@ class Calculator implements CalculatorInterface
         }
 
         return $sumsByCustomer;
+    }
+
+    /**
+     * @return CurrencyConverterInterface
+     */
+    public function getCurrencyConverter(): CurrencyConverterInterface
+    {
+        return $this->currencyConverter;
     }
 
     /**
@@ -91,15 +93,5 @@ class Calculator implements CalculatorInterface
     public function setCurrencies(array $currencies): void
     {
         $this->currencyConverter->setCurrencies($currencies);
-    }
-
-    /**
-     * @param string $code
-     */
-    public function setOutputCurrencyCode(string $code): void
-    {
-        $this->currencyConverter->validateCurrencyCode($code);
-
-        $this->outputCurrencyCode = $code;
     }
 }

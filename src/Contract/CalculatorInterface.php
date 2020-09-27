@@ -18,13 +18,13 @@ interface CalculatorInterface
     public function setCurrencies(array $currencies): void;
 
     /**
-     * @param string $code
-     */
-    public function setOutputCurrencyCode(string $code): void;
-
-    /**
      * @param string $vat
      * @return Total[]
      */
     public function getTotals($vat = ''): array;
+
+    /**
+     * @return CurrencyConverterInterface
+     */
+    public function getCurrencyConverter(): CurrencyConverterInterface;
 }

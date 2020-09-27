@@ -10,9 +10,6 @@ class CalculatorException extends \Exception
     /** @var int */
     public const NOT_SUPPORTED_INVOICE_TYPE = 2;
 
-    /** @var int */
-    public const OUTPUT_CURRENCY_NOT_SET = 3;
-
     /**
      * @param string $parentId
      * @return CalculatorException
@@ -29,13 +26,5 @@ class CalculatorException extends \Exception
     public static function notSupportedInvoiceType(string $type): CalculatorException
     {
         return new self('Not supported invoice type: ' . $type, self::NOT_SUPPORTED_INVOICE_TYPE);
-    }
-
-    /**
-     * @return CalculatorException
-     */
-    public static function outputCurrencyNotSet(): CalculatorException
-    {
-        return new self('The property outputCurrency is not set.', self::OUTPUT_CURRENCY_NOT_SET);
     }
 }

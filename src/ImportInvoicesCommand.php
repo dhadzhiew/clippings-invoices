@@ -61,8 +61,11 @@ class ImportInvoicesCommand implements CommandInterface
     {
         $normalizedParams = self::normalizeParams($params);
 
-        $this->calculator->setOutputCurrencyCode($normalizedParams[self::PARAM_OUTPUT_CURRENCY]);
         $this->calculator->setCurrencies($normalizedParams[self::PARAM_EXCHANGE_RATES]);
+
+        $currencyConverter = $this->calculator->getCurrencyConverter();
+        $outputCurrencyCode = $normalizedParams[self::PARAM_OUTPUT_CURRENCY];
+        $currencyConverter->validateCurrencyCode($outputCurrencyCode);
 
         $this->parser->open($normalizedParams[self::PARAM_FILE_PATH]);
         $dataGenerator = $this->parser->parse();
@@ -77,8 +80,11 @@ class ImportInvoicesCommand implements CommandInterface
         }
 
         foreach ($totals as $total) {
-            $amount = new Decimal($total->getAmount(), 2);
-            echo sprintf('%s - %s %s', $total->getCustomer(), $amount, $total->getCurrencyCode()) . PHP_EOL;
+            $amount = $currencyConverter
+                ->convert($total->getAmount(), $total->getCurrencyCode(), $outputCurrencyCode)
+                ->scale(2);
+
+            echo sprintf('%s - %s %s', $total->getCustomer(), $amount, $outputCurrencyCode) . PHP_EOL;
         }
     }
 
