@@ -4,7 +4,7 @@ namespace Clippings\Component\Calculator;
 
 use Clippings\Component\Calculator\Contract\CalculatorInterface;
 use Clippings\Component\Calculator\Contract\InvoiceFactoryInterface;
-use Clippings\Component\Calculator\Exception\ImportCommandException;
+use Clippings\Component\Calculator\Exception\ImportInvoicesCommandException;
 use Clippings\Component\Calculator\Util\Command\CommandInterface;
 use Clippings\Component\Calculator\Util\Parser\FileParserInterface;
 use Clippings\Component\Calculator\Util\Type\Decimal;
@@ -55,7 +55,7 @@ class ImportInvoicesCommand implements CommandInterface
     /**
      * @param array $params
      * @param array $options
-     * @throws ImportCommandException
+     * @throws ImportInvoicesCommandException
      */
     public function exec(array $params, array $options)
     {
@@ -66,6 +66,16 @@ class ImportInvoicesCommand implements CommandInterface
 
         $outputCurrencyCode = $normalizedParams[self::PARAM_OUTPUT_CURRENCY];
         $currencyConverter->validateCurrencyCode($outputCurrencyCode);
+
+        $filePath = $normalizedParams[self::PARAM_FILE_PATH];
+
+        if (!file_exists($filePath)) {
+            throw ImportInvoicesCommandException::fileNotExists($filePath);
+        }
+
+        if (!is_readable($filePath)) {
+            throw ImportInvoicesCommandException::fileNotReadable($filePath);
+        }
 
         $this->parser->open($normalizedParams[self::PARAM_FILE_PATH]);
         $dataGenerator = $this->parser->parse();
@@ -91,7 +101,7 @@ class ImportInvoicesCommand implements CommandInterface
     /**
      * @param array $params
      * @return array
-     * @throws ImportCommandException
+     * @throws ImportInvoicesCommandException
      */
     private static function normalizeParams(array $params): array
     {
@@ -101,7 +111,7 @@ class ImportInvoicesCommand implements CommandInterface
         foreach ($keys as $index => $name) {
             $param = $params[$index] ?? null;
             if (!$param) {
-                throw ImportCommandException::missingParam($name);
+                throw ImportInvoicesCommandException::missingParam($name);
             }
 
             $normalized[$name] = $param;
@@ -115,7 +125,7 @@ class ImportInvoicesCommand implements CommandInterface
     /**
      * @param string $rates
      * @return Currency[]
-     * @throws ImportCommandException
+     * @throws ImportInvoicesCommandException
      */
     private static function parseExchangeRates(string $rates)
     {
@@ -124,7 +134,7 @@ class ImportInvoicesCommand implements CommandInterface
 
         foreach ($rates as $rate) {
             if (!preg_match('/^(\w+):(\d+(?:\.\d+)?)$/', $rate, $matches)) {
-                throw ImportCommandException::cannotParseExchangeRate($rate);
+                throw ImportInvoicesCommandException::cannotParseExchangeRate($rate);
             }
 
             $currencies[] = new Currency($matches[1], new Decimal($matches[2]));

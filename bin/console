@@ -9,6 +9,7 @@ use Clippings\Component\Calculator\Util\Parser\CSVFileParser;
 use Clippings\Component\Calculator\Util\Parser\FileDataSource;
 use Clippings\Component\Calculator\ImportInvoicesCommand;
 use Clippings\Component\Calculator\InvoiceFactory;
+use Clippings\Component\Calculator\Exception\ImportInvoicesCommandException;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -22,6 +23,6 @@ try {
     $runner->addCommand('import', new ImportInvoicesCommand($calculator, $parser, new InvoiceFactory()));
 
     $runner->run();
-} catch (CommandException $e) {
+} catch (CommandException | ImportInvoicesCommandException $e) {
     echo 'ERROR: ' . $e->getMessage();
 }
