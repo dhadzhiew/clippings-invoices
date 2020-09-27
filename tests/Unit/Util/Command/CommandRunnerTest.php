@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Facade;
+namespace Tests\Unit\Util\Command;
 
 use Clippings\Component\Calculator\Util\Command\CommandException;
 use Clippings\Component\Calculator\Util\Command\CommandInterface;
