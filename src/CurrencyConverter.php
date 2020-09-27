@@ -68,7 +68,7 @@ class CurrencyConverter implements CurrencyConverterInterface
 
         $to = $this->currencies[$toCode] ?? null;
         if (!$to) {
-            throw CurrencyConverterException::missingCurrency($to);
+            throw CurrencyConverterException::missingCurrency($toCode);
         }
 
         return $amount
