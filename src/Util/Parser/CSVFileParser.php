@@ -17,12 +17,13 @@ class CSVFileParser extends CSVParser implements FileParserInterface
     /**
      * @param string $filePath
      */
-    public function open(string $filePath)
+    public function open(string $filePath): void
     {
         $this->dataSource->open($filePath);
     }
-    
-    public function close() {
+
+    public function close(): void
+    {
         $this->dataSource->close();
     }
 

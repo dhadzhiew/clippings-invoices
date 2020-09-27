@@ -57,7 +57,7 @@ class ImportInvoicesCommand implements CommandInterface
      * @param array $options
      * @throws ImportInvoicesCommandException
      */
-    public function exec(array $params, array $options)
+    public function exec(array $params, array $options): void
     {
         $normalizedParams = self::normalizeParams($params);
 
@@ -127,7 +127,7 @@ class ImportInvoicesCommand implements CommandInterface
      * @return Currency[]
      * @throws ImportInvoicesCommandException
      */
-    private static function parseExchangeRates(string $rates)
+    private static function parseExchangeRates(string $rates): array
     {
         $rates = explode(',', $rates);
         $currencies = [];
